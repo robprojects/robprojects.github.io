@@ -1,0 +1,8 @@
+---
+layout: post
+title:  "Welcome!"
+date:   2019-12-24 15:41:17 +0000
+categories: 
+---
+
+I've decided to publish several of my personal projects on github. At the same time I'll be posting on here to explain the build process behind them. I've relied heavily on generous individuals who've written online tutorials and posted code, so now time for me to give something back.
