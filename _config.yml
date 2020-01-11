@@ -29,10 +29,13 @@ texture:
                 twitter: robdimond
                 github: robprojects
 
+        showNav: true
 
+show_excerpts: true
 
 # Build settings
 remote_theme: thelehhman/texture
+#remote_theme: benradford/Slate-and-Simple-Jekyll-Theme
 plugins:
   - jekyll-feed
 

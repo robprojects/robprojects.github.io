@@ -1,0 +1,39 @@
+---
+layout: post
+title:  "Gameboy LCD"
+date:   2020-01-09 15:41:17 +0000
+categories: 
+---
+
+### Slippery slope
+This was a simple repair project that spiralled out of control. I came upon an original Nintendo Gameboy that had a failed LCD screen with many horizontal lines of pixels missing. I followed an online tutorial that explained how you can reheat the glue that attaches the flex cable to the LCD with a soldering iron to get it working again. Well, that didn't work for me and I ended up burning through the flex.  A quick search showed the original LCD is no longer available, and no aftermarket replacement. Game over.
+
+### Interfacing to the Gameboy 
+Fortunately, the schematics for the original gameboy are widely available, and the LCD interface has been [reverse engineered][longhorn].
+The LCD is 160x144 pixels and each pixel can show four levels of grayscale (more like four levels of a muddy green colour!).  The electrical interface is as simple as it gets with two bits of data that represent the four gray levels. A vertical sync signal is asserted along with the first line (0 of 144) and a horizontal sync signal along with the first pixel of every line. Each pixel is indicated by a rising edge on a 4MHz clock.  The 4MHz clock sounds pretty pedestrian these days but it's plenty fast enought to refresh the display 60 times a second.
+
+### Microcontroller to the rescue
+For my first attempt I used an STM32 microcontroller board (widely known as the 'blue pill' on the internet) and one of the ubiqitous [ILI9341][ili9341] LCD displays. Clones of the blue pill board can be found for next to nothing on AliExpress and the [Eclipse][eclipse] toolchain will get you up and running.  You also need to buy an STLINK v2 JTAG programmer, cheap clones are available on eBay, of course.
+It's possible to configure one of the DMA controllers on the STM32 to capture a synchronous parallel bus into RAM (which is what the gameboy interface is) up to about 10MHz.  ST have written an app note [AN4666][an4666] that explains how to do this.
+
+### Speeds and feeds
+The DMA controller reads an 8 or 16 bit IO register on every clock and writes the data sequentially into RAM.  Trouble is, I don't have enough RAM to capture the entire screen. 160x144 at two bits per pixel is about 6kb of data (fine), but because of the way the DMA works I have to capture at least 8 bits on every cycle.  The solution is to do one line at a time: capture 160 pixels into a buffer, convert into the 16-bit colour values for the display, and send out to the LCD.  To convert to 16-bit colour values, I capture the full 16-bit IO register so that the data are correctly aligned, then loop over the data, pick out the two bits corresponding to the data and expand them into a 16bit grayscale colour. There is another DMA controller to send the data out to the LCD.
+
+### Pipelining
+Trouble is, this doesn't work. The gameboy doesn't give me enough time after each line of data to do the conversion and send the line out before it starts sending me another one. At a 60Hz frame rate, a line must be sent every 110us or so (that's 144 lines * 60 frames per second).  With the 4MHz clock it takes 160/4M seconds (40us) to send each line.  The data is sent to the LCD over a 1-bit bus that runs at 36MHz so that takes around 70us (16bits * 160 pixels/36MHz).  That gives me zero time to process the data, and in reality it's less than that because there are other bits of waiting between lines and between frames.
+
+
+The trick is to recognise that the DMA in from the gameboy, the processing of the data and the DMA out to the LCD can all happen in parallel *for different lines*.  I buffer three or more lines at a time, then I read in from the gameboy line X at the same time as processing line X-1 and sending to the display X-2. While I'm reading in lines 0 and 1, that means nothing is going out to the display.  This is called filling the pipeline, and illustrates the fundamental trade-off being made. I'm increasing the *throughput* of the system by making the *latency* for a given line through the system worse.  In this case, the trade-off is a good one because the throughput gets multiplied and humans can't perceive a couple of hundreds of micro seconds delay to a moving picture.
+This is exactly what the final code does.  I had to modify the code that DMAs out to the screen from the default routine so that it didn't wait for DMA completion before returning from the function.
+
+### Finished?
+![gameboy with tft]({{ site.url}}/assets/gb1.jpg)
+
+
+The result is a playable but somewhat dissatisfying gameboy. The resolution of the modern LCD is higher and the screen gets 'letterboxed' into a corner. What I really want is upscaling, ideally a clever form of [upscaling][upscaling] that takes advantage of the higher screen resolution. It doesn't fit within the gameboy case and also seems wasteful to burn a 32-bit, 72MHz CPU on such a trivial task.
+
+[longhorn]: http://longhornengineer.com/category/projects/hardware/gameboy-dmg-01-vga/
+[ili9341]: https://www.adafruit.com/product/1770
+[an4666]: https://www.st.com/content/ccc/resource/technical/document/application_note/7a/88/df/e3/d3/36/40/29/DM00169730.pdf/files/DM00169730.pdf/jcr:content/translations/en.DM00169730.pdf
+[eclipse]: https://gnu-mcu-eclipse.github.io/
+[upscaling]: https://en.wikipedia.org/wiki/Pixel-art_scaling_algorithms
