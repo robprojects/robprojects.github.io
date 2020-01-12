@@ -30,6 +30,7 @@ texture:
                 github: robprojects
 
         showNav: true
+        analytics_id: 'UA-156066581-1'
 
 show_excerpts: true
 
