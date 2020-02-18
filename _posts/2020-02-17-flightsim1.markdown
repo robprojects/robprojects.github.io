@@ -21,7 +21,7 @@ The actuators are built around a chassis made from laser cut and CNC folded shee
 ### VR
 The VR setup is a stock HTC Vive. I have one of the Vive controllers fixed to the seat behind my head which is used to subtract movements of the platform with the [OpenVR Input Emulator][inputemulator] software. Availability of motion cancellation was my main reason for choosing the Vive setup.
 
-## Simulator
+### Simulator
 The simulator software is unmodified XPlane 11. XPlane has great VR integration and provides the data I need to drive the motion platform via UDP.
 
 ### Motion control
