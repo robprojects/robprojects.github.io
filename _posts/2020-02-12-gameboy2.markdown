@@ -6,7 +6,6 @@ categories:
 ---
 
 ### A dead-end
-
 In the previous post I described how to use a microcontroller to adapt the LCD signals from a 30 year old gameboy to drive a modern LCD screen. While it can be made to work, it's ultimately a dead-end. Pipelining allowed us to keep up with the gameboy but what I really want is upscaling to fill the LCD screen.  This doubles the number of pixels in each line that have to be sent to the LCD in the horizontal dimension (to go from 160 to 320) and in the vertical dimension we'll occasionally have to send two lines (to go from 144 to 240). While there might be a way forward by looking at a different microcontroller, or trying to drive the 16-bit parallel interface on the LCD, ultimately I had an itch to build some custom hardware, so that's where we're going.
 
 ### From software to hardware

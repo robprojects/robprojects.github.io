@@ -1,0 +1,32 @@
+---
+layout: post
+title:  "Flight simulator"
+date:   2020-02-17 15:41:17 +0000
+categories: 
+---
+### Coming soon: Full motion simulator writeup
+This project has been in the works for about 4 years. It's a single seat, full motion flight simulator. I've just got a webcam setup so I can capture it in action. Unfortunately I captured a fairly unsuccessful flight from Heathrow to London City that ends up overshooting the runway.
+
+The actuators and motion control software are all DIY and I plan to open source the design.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RnJYMXGJvMw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+### Frame
+The frame is all welded up from steel box section in multiple sections so that it's somewhat portable. The lovely red powdercoat was done by [PowderPlus][powderplus]. The control mount section at the front is still a wooden mock-up that I will re-make out of steel at some point.
+
+### Actuators
+The actuators are built around a chassis made from laser cut and CNC folded sheet steel (by [Ceandess][ceandess]) and steel tubing. The power comes from a cheap 24V DC brushed motor (as used in Chinese electric scooters) which drives a 16mm ball screw via a chain.  An incremental optical encoder tracks the position of the ball screw. The electronics are all custom: a motor driver and an STM32 microcontroller. The motor driver is a discrete power MOSFET H-bridge and has current/voltage monitoring and a braking resistor to dump regen current. The STM32 has a CAN transceiver and all of the actuators sit on a CAN bus which is used for position, status updates and programming PID coefficients, current limits etc. This design means only four wires are needed for all the actuators: VCC, GND, CANH and CANL. I had to put a lot of work into making the actuator robust as the motor is powerful enough to tear the thing apart and the currents/voltages flying around can easily blow up the electronics.
+
+### VR
+The VR setup is a stock HTC Vive. I have one of the Vive controllers fixed to the seat behind my head which is used to subtract movements of the platform with the [OpenVR Input Emulator][inputemulator] software. Availability of motion cancellation was my main reason for choosing the Vive setup.
+
+## Simulator
+The simulator software is unmodified XPlane 11. XPlane has great VR integration and provides the data I need to drive the motion platform via UDP.
+
+### Motion control
+I ended up writing my own software that implements the classical Reed/Nahon motion cueing. It also has a fairly crude graphical display that shows the position/health of each actuator and the position of the platform. The Reed/Nahon algorithm has lots of coefficients that need to be tuned and I still have some work to do on this. 
+
+[ceandess]: https://ceandess.online/
+[powderplus]: http://www.powderplus.co.uk/
+[inputemulator]: https://github.com/matzman666/OpenVR-InputEmulator/releases
