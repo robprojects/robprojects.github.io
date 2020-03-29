@@ -2,7 +2,7 @@
 layout: post
 title:  "Flight simulator"
 date:   2020-02-17 15:41:17 +0000
-categories: 
+categories: Flightsim
 ---
 ### Coming soon: Full motion simulator writeup
 This project has been in the works for about 4 years. It's a single seat, full motion flight simulator. I've just got a webcam setup so I can capture it in action. Unfortunately I captured a fairly unsuccessful flight from Heathrow to London City that ends up overshooting the runway.

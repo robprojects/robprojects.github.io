@@ -2,7 +2,7 @@
 layout: post
 title:  "Gameboy LCD"
 date:   2020-01-09 15:41:17 +0000
-categories: 
+categories: Gameboy
 ---
 
 ### Slippery slope

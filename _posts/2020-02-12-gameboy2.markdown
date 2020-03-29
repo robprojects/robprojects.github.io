@@ -2,7 +2,7 @@
 layout: post
 title:  "Gameboy LCD v2"
 date:   2020-02-12 15:41:17 +0000
-categories: 
+categories: Gameboy
 ---
 
 ### A dead-end
