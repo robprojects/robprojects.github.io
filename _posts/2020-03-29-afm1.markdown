@@ -1,0 +1,29 @@
+---
+layout: post
+title:  "Porsche 944 MAF Conversion"
+date:   2020-03-29 10:08:17 +0000
+categories: Porsche944
+---
+### AFM to MAF Conversion
+My 1989 Porsche 944 project car has a Bosch L-Jetronic fuel injection system. A critical part of this system is the AFM (Air Flow Meter) which measures the volume + temperature of air entering the engine so that the ECU can meter the correct amount of fuel. Modern cars use a MAF (Mass Air Flow) sensor to do the same job. In this post I'm going to describe how to fit a modern VW/Audi MAF to the 944.
+
+### AFM vs MAF
+The AFM uses a spring loaded mechanical flap to measure the air flow into the engine. This flap drives a potentiometer to generate a voltage into the ECU that varies with position of the flap. Since the mass of air is needed to calculate the amount of fuel, the ECU [estimates mass][gaslaw] by combining the flow rate with the temperature. A MAF measures the air mass directly using a hot wire. A control circuit tries to keep the wire at constant temperature while it's being cooled by the air flow. The MAF sends a signal to the ECU corresponding to the current it's putting into the wire to maintain the temperature.
+
+### Why MAF?
+The biggest problem with the original AFM is that the potentiometer has a carbon track which wears over time. A replacement AFM from Porsche is expensive and so people resort to hacks such as [bending the potentiometer arm][clarksgarage]. Whether the AFM is restrictive and robs the engine of horsepower or not is a debate that I'm not going to get into.
+
+### Doing the conversion
+To do the conversion you need some plumbing and a 'mapper' that converts the MAF voltage level to what the ECU was expecting. I used an STM32 Cortex-M0 microcontroller which has a built-in ADC for the voltage input and a PWM for the voltage output. I built my own PCB with the schematics inspired from [here][stm32dev].
+
+### Running with the MAF
+Here is the finished 'mapper' (red PCB in the picture) successfully running the engine. The MAF is a VAG group (keeping it in the family!) one from an Audi TT. Full write up of the build and source code coming in another post...
+<iframe width="560" height="315" src="https://www.youtube.com/embed/9davtq7FP1U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Finished install in the car
+Finished install. The wire hanging out the front is a 12V feed which is needed by the MAF but not by the AFM. The car drove absolutely fine although it smelt like it was running a little rich, so some more tuning needed.
+![maf installed in a Porsche 944]({{ site.url}}/assets/afm3.jpg)
+
+[gaslaw]: https://en.wikipedia.org/wiki/Ideal_gas_law
+[clarksgarage]: http://www.clarks-garage.com/shop-manual/elect-22.htm
+[stm32dev]: https://andybrown.me.uk/2015/10/31/stm32f042dev/
