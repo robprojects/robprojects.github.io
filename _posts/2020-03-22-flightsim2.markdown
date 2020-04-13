@@ -5,11 +5,11 @@ date:   2020-03-22 15:41:17 +0000
 categories: Flightsim
 ---
 ### Simulator motion control
+![six degrees of freedom of an aircraft]({{ site.url}}/assets/motionplatform1.png)
 In this post I'm going to explain the motion control software.  This software takes game data and generates motion commands to the actuators.  It also provides very basic visual feedback via a GUI and control via the keyboard. The game data is in the form of rotational orientation about the three axis (roll, pitch, yaw) and three translational accelerations (heave, sway, surge). The motion commands are in the form of a length for each of the six linear actuators that move the platform relative to the base.
 
 All of the code is available on [github][github].
 
-![six degrees of freedom of an aircraft]({{ site.url}}/assets/motionplatform1.png)
 
 ### Game data
 The game data comes from XPlane via the [UDP interface][xplanedata].  The source code on github also contains code to use the TCP interface of the [NoLimits2][nolimits] rollercoaster simulator.
