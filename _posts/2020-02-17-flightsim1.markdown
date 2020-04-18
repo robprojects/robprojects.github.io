@@ -9,7 +9,7 @@ This project has been in the works for about 4 years. It's a single seat, full m
 
 The actuators and motion control software are all DIY and I plan to open source the design.
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/RnJYMXGJvMw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/RnJYMXGJvMw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ### Frame

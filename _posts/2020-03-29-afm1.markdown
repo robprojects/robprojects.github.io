@@ -18,7 +18,7 @@ To do the conversion you need some plumbing and a 'mapper' that converts the MAF
 
 ### Running with the MAF
 Here is the finished 'mapper' (red PCB in the picture) successfully running the engine. The MAF is a VAG group (keeping it in the family!) one from an Audi TT. Full write up of the build and source code coming in another post...
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9davtq7FP1U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/9davtq7FP1U" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 ### Finished install in the car
 Finished install. The wire hanging out the front is a 12V feed which is needed by the MAF but not by the AFM. The car drove absolutely fine although it smelt like it was running a little rich, so some more tuning needed.
