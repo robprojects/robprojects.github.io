@@ -1,0 +1,72 @@
+---
+layout: post
+title:  "Flight simulator actuator"
+date:   2020-07-21 15:41:17 +0000
+categories: Flightsim
+---
+{% include render3d_head.html %}
+### Building a motion platform actuator
+This post describes how I built actuators for a Stewart platform capable of carrying a human and generating motion cues for flight simulation. Such actuators must:
+ * Have sufficient range of motion (around 500mm)
+ * Have enough power to support (and move!) the weight of a person, seat and other hardware
+ * Have sufficient speed to provide realistic motion cues (I read several papers that suggested around 0.5m/s)
+ * Are reliable enough (remember there are six and just one failing takes down the whole platform)
+ * Are safe. I'm building for my own use so I don't have to meet statutory requirements, but I don't want to be [chewed up within my own contraption][midgeley].
+In addition I'm building just a handful of these and so I need to use methods/materials that don't have high tooling costs.
+
+### A note on safety
+Safety is the main reason why my answer to the question 'wow that's cool would you build me one if I pay you' is NO. For example: If I was to sell this in the EU it would need to be compliant to the:
+
+ * EMC Directive - to make sure that it doesn't interfere with other equipment such as TV broadcasts.
+ * Low voltage directive - to make sure it doesn't electrocute people.
+ * Machinery directive - to make sure it doesn't chew off limbs.
+
+Ha! Needless EU red tape you say, costing businesses time and money! Well, not really. Pretty much every jurisdiction has decided on a similar set of rules to make sure that products don't injure people. The US often requires literally the same thing but expressed in feet and inches. So harmonisation of rules is a great way to reduce costs for everyone by removing needless regional differentiation.
+
+### Honda Jazz electric steering racks
+The first option I considered was Honda Jazz steering racks. The Honda Jazz (Honda Fit in the US) is a popular small city car. They have had electric power steering since the early 2000's and the going rate on eBay for a used rack is about 30 quid. For your 30 pounds you get a powerful 12V motor and the rack mechanism to convert it to linear motion. The 12V motor is a plain brushed DC motor so simple to drive (or so I thought, more in a later blog post!). Most cars with electric power steering now use brushless motors which need more sophisticated control. The steering rack even comes with a balljoint on the end, ideal!
+I ultimately abandoned the steering rack idea for several reasons:
+
+ * The travel isn't very far, about 300mm
+ * I couldn't figure out a way to mount the racks in a satisfactory way
+ * After a life under a car they were pretty grotty, so a lot of work to clean up to something suited to bringing into the house
+ * The rack is designed to be able to easily back-drive the motor, so if the system fails you can still manually turn the steering. This means the weight of the platform will act to constantly drive the motor.
+
+### Finished Actuator
+The below 3D rendering shows the finished actuator. How I managed to display the 3D render in the browser is probably worth a blog post in itself. Try dragging/scrolling to navigate the 3D view.
+
+{% include render3d.html file='actuatorrender' container='actuatorrender' translate='-1.0,0.0,-3.0' rotate='1.57,0,1.05' %}
+
+And in the flesh...
+![Finished actuator]({{ site.url}}/assets/act3.jpg)
+
+### Chassis
+The chassis is formed from laser cut steel sheet and two 20mm steel tubes. I MIG welded these together and got the whole assembly powder coated in glorious RAL3020 Gloss Traffic Red. The most difficult part of the fabrication was keeping all of the plates parallel to one another. If they are not perfectly aligned, the linear bearings bind and the whole thing locks up. The solution, in the end, was an MDF jig to hold everything in place while it was being welded. The beauty of such a fabrication is it's very cheap to produce in small quantities and also extremely strong compared to other methods available to the hobbyist such as 3D printing or wood.
+
+The photo below shows the actuator dry-build before painting. This version is using the original Honda Jazz power steering motor and belt drive.
+![Actuator before painting]({{ site.url}}/assets/act1.jpg)
+
+### Ball-screw
+The rotary to linear motion comes from a ball screw. The wonder of cheap CNC machines and AliExpress means that these are astonishingly cheap and come complete with a fixed bearing that bolts to the chassis.
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/clZ_Wz9kzTY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+### Motor
+I did some experimentation with the Honda Jazz steering rack motors as they were relatively cheap and high quality. In the end I went with brand new DC motors intended for Chinese electric scooters. These are MY1025 motors which are ubiquitous on AliExpress/eBay and have proven to be the right combination of powerful, reliable and extremely cheap.
+The ball-screw is chain driven from the motor, a natural choice as the motor comes pre-fitted with a sprocket. With hindsight, the chain drive has proven to be quite noisy and I would find a way to use direct drive or a belt if I were to do another iteration.
+
+![Motor close up]({{ site.url}}/assets/act4.jpg)
+
+The MY1025 is rated at 5Nm of torque at 2650RPM. 2650RPM is 44 revolutions per second and since the thread pitch of the ball-screw is 5mm, it should move at 220mm/s once the motor has accelerated. Let's hope that's enough!
+
+### Other parts...
+An incremental rotary encoder provides position feedback. There are no end-stop sensors or other mechanical feedback. In a later post I'll explain the servo control and how it works without these other sensors.
+A linear bearing supports the shaft at the far end. Again, the linear bearing and necessary hardened shaft were purchases from AliExpress.
+Another shaft and linear bearing prevent the whole assembly from rotating.
+
+### Testing
+I built a wooden version of the platform to test the actuators and experiment with the geometry.
+
+![Mockup of six actuators]({{ site.url}}/assets/act2.jpg)
+
+[midgeley]: https://en.wikipedia.org/wiki/Thomas_Midgley_Jr.
